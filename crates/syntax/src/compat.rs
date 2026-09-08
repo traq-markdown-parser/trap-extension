@@ -15,6 +15,7 @@ pub fn links() -> LinkOptions {
         normalize: commonmark::inlines::url::normalize,
     }
 }
+
 pub fn blank_rule() -> &'static BlockRule {
     static RULE: std::sync::LazyLock<BlockRule> = std::sync::LazyLock::new(|| {
         BlockRule::new(|input, _| {
@@ -36,20 +37,25 @@ pub fn blank_rule() -> &'static BlockRule {
 pub fn quote_rule() -> &'static BlockRule {
     static RULE: std::sync::LazyLock<BlockRule> = std::sync::LazyLock::new(|| {
         BlockRule::new(|input, budget| {
-        let Some(mut found) = commonmark::blocks::quote::parse(input, budget)? else { return Ok(None); };
-        for node in &mut found.nodes {
-            if matches!(&node.content, DraftContent::Blocks(view) if view.text().trim_matches([' ', '\t', '\n', '\r']).is_empty()) {
-                node.finish = Some(|node| {
-                    if node.children().is_empty() {
-                        let span = Span { start: node.span.end, end: node.span.end };
-                        let blank = NodeKind::new(BlankLineData {});
-                        node.content = DraftContent::Nodes(vec![DraftNode::leaf(span, blank)]);
-                    }
-                });
+            let Some(mut found) = commonmark::blocks::quote::parse(input, budget)? else {
+                return Ok(None);
+            };
+
+            for node in &mut found.nodes {
+                if matches!(&node.content, DraftContent::Blocks(view) if view.text().trim_matches([' ', '\t', '\n', '\r']).is_empty()) {
+                    node.finish = Some(|node| {
+                        if node.children().is_empty() {
+                            let span = Span { start: node.span.end, end: node.span.end };
+                            let blank = NodeKind::new(BlankLineData {});
+                            node.content = DraftContent::Nodes(vec![DraftNode::leaf(span, blank)]);
+                        }
+                    });
+                }
             }
-        }
-        Ok(Some(found))
-    }).named("quote")
+
+            Ok(Some(found))
+        })
+        .named("quote")
     });
     &RULE
 }

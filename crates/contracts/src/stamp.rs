@@ -6,4 +6,5 @@ use serde::{Deserialize, Serialize};
 pub struct StampData {
     pub literal: String,
 }
+
 impl markdown_ast::NodeData for StampData {}

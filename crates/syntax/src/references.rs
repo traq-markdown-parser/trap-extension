@@ -28,7 +28,10 @@ fn parse(input: &InlineInput<'_>, budget: &mut Budget) -> Result<Option<InlineMa
     }
     let bytes = input.source.text().as_bytes();
     let mut stack = vec![];
-    let (mut quote, mut escaped, mut end) = (false, false, None);
+    let mut quote = false;
+    let mut escaped = false;
+    let mut end = None;
+
     for (index, &byte) in bytes.iter().enumerate().skip(input.position + 1) {
         budget.spend(1)?;
         if quote {
@@ -62,12 +65,14 @@ fn parse(input: &InlineInput<'_>, budget: &mut Budget) -> Result<Option<InlineMa
     let Some(end) = end else {
         return Ok(None);
     };
+
     budget.spend(end - input.position)?;
     let Ok(value) =
         serde_json::from_str::<serde_json::Value>(&input.source.text()[input.position + 1..end])
     else {
         return Ok(None);
     };
+
     let (Some(target), Some(id), Some(label)) = (
         value.get("type").and_then(|v| v.as_str()),
         value.get("id").and_then(|v| v.as_str()),

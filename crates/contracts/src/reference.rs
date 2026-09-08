@@ -18,4 +18,5 @@ pub struct ReferenceData {
     pub id: String,
     pub label: String,
 }
+
 impl markdown_ast::NodeData for ReferenceData {}

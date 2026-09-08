@@ -1,5 +1,5 @@
 use markdown_renderer::{Plugin, Result};
-use markdown_trap_contracts::*;
+use markdown_trap_contracts::ReferenceData;
 
 use std::sync::LazyLock;
 
