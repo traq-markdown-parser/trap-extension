@@ -12,7 +12,7 @@ traP 固有の Markdown 拡張部品を提供します。traQ 向けの組み合
 
 各ルールの Plugin を、利用側の GrammarBuilder / PresetBuilder に追加して使います。
 文法の選択と順序、通知 URL の表示方針、処理結果の組み合わせは利用側で決めます。
-[traQ の構成・実行例](https://github.com/traq-markdown-parser/traq/tree/main/crates/traq-processing)
+[traQ の構成・実行例](https://github.com/traq-markdown-parser/traq/tree/main/crates/processing)
 を参照してください。
 
 ## 開発
