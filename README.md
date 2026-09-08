@@ -27,7 +27,3 @@ Rust の版は `rust-toolchain.toml` で固定しています。依存する
 [core](https://github.com/traq-markdown-parser/core) と
 [commonmark](https://github.com/traq-markdown-parser/commonmark) は Git の確定 revision
 から取得するため、他の checkout は不要です。traQ の構成・配布には依存しません。
-
-リポジトリ名は `trap` から `trap-extension` に変更しました。Rust package 名と
-ノード型の通信キーは維持しています。配置変更の履歴は [MIGRATION.md](MIGRATION.md)
-を参照してください。
