@@ -192,8 +192,10 @@ dependencies = [
  "markdown-ast",
  "markdown-extractor",
  "markdown-trap-contracts",
+ "schemars",
  "serde",
  "serde_json",
+ "ts-rs",
 ]
 
 [[package]]

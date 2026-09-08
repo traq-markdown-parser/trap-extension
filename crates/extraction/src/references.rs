@@ -3,7 +3,8 @@ use markdown_trap_contracts::{ReferenceData, ReferenceKind};
 use serde::Serialize;
 
 #[derive(Debug, Default, PartialEq, Serialize)]
-#[serde(rename_all = "camelCase")]
+#[cfg_attr(feature = "contracts", derive(ts_rs::TS, schemars::JsonSchema))]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct References {
     pub mentions: Vec<String>,
     pub group_mentions: Vec<String>,
