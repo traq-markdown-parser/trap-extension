@@ -4,8 +4,6 @@ members = [
     "crates/extraction",
     "crates/syntax",
     "crates/text",
-    "crates/traq-processing",
-    "crates/traq",
 ]
 resolver = "3"
 
