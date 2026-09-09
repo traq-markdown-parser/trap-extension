@@ -5,6 +5,7 @@ use markdown_parser::{
         inline::{InlineInput, InlineMatch, InlineRule},
     },
 };
+
 pub use markdown_trap_contracts::{EmbeddingData, EmbeddingKind, ReferenceData, ReferenceKind};
 
 pub fn inline_rule() -> &'static InlineRule {
@@ -26,12 +27,14 @@ fn parse(input: &InlineInput<'_>, budget: &mut Budget) -> Result<Option<InlineMa
     if !input.tail().starts_with("!{") {
         return Ok(None);
     }
+
     let Some(end) = json_end(input, budget)? else {
         return Ok(None);
     };
     budget.spend(end - input.position)?;
 
     let text = &input.source.text()[input.position + 1..end];
+
     let Some(data) = reference_data(text) else {
         return Ok(None);
     };
@@ -41,12 +44,14 @@ fn parse(input: &InlineInput<'_>, budget: &mut Budget) -> Result<Option<InlineMa
 
 fn json_end(input: &InlineInput<'_>, budget: &mut Budget) -> Result<Option<usize>, ParseError> {
     let bytes = input.source.text().as_bytes();
+
     let mut stack = vec![];
     let mut quote = false;
     let mut escaped = false;
 
     for (index, &byte) in bytes.iter().enumerate().skip(input.position + 1) {
         budget.spend(1)?;
+
         if quote {
             if escaped {
                 escaped = false;
@@ -57,6 +62,7 @@ fn json_end(input: &InlineInput<'_>, budget: &mut Budget) -> Result<Option<usize
             }
             continue;
         }
+
         match byte {
             b'"' => quote = true,
             b'{' | b'[' => {
@@ -74,6 +80,7 @@ fn json_end(input: &InlineInput<'_>, budget: &mut Budget) -> Result<Option<usize
             _ => {}
         }
     }
+
     Ok(None)
 }
 
@@ -81,6 +88,7 @@ fn reference_data(text: &str) -> Option<markdown_parser::NodeKind> {
     let value = serde_json::from_str::<serde_json::Value>(text).ok()?;
     let target = value.get("type").and_then(|value| value.as_str())?;
     let id = value.get("id").and_then(|value| value.as_str())?;
+
     if let Some(kind) = embedding_kind(target) {
         return Some(markdown_parser::NodeKind::new(EmbeddingData {
             target: kind,
@@ -93,6 +101,7 @@ fn reference_data(text: &str) -> Option<markdown_parser::NodeKind> {
             literal: format!("!{text}"),
         }));
     }
+
     let label = value.get("raw").and_then(|value| value.as_str())?;
     let target = reference_kind(target)?;
 

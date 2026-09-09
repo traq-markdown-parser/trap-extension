@@ -21,6 +21,7 @@ pub struct References {
     pub channel_links: Vec<String>,
     pub embeddings: Vec<EmbeddedInfo>,
 }
+
 /// Repeated calls share the default implementation; editing a value is isolated.
 pub fn plugin() -> Plugin<References> {
     static PLUGIN: std::sync::LazyLock<Plugin<References>> =
@@ -30,14 +31,17 @@ pub fn plugin() -> Plugin<References> {
 
 fn build() -> Result<Plugin<References>> {
     let mut plugin = Plugin::<References>::new(&markdown_trap_contracts::preset().references);
+
     plugin.on::<ReferenceData>(|reference, result| {
         add_reference(reference, result);
         Ok(())
     })?;
+
     plugin.on::<EmbeddingData>(|embedding, result| {
         add_embedding(embedding, result);
         Ok(())
     })?;
+
     Ok(plugin)
 }
 
@@ -61,6 +65,7 @@ fn add_reference(reference: &ReferenceData, result: &mut References) {
             ReferenceKind::Group => &mut result.group_mentions,
             ReferenceKind::Channel => &mut result.channel_links,
         };
+
         // Preserve document order and duplicates, including inside spoilers.
         ids.push(id);
     }

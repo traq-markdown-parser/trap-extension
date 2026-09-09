@@ -7,8 +7,10 @@ use markdown_trap_extraction::{References, references};
 fn normalized_references_preserve_order_duplicates_and_categories() {
     let mut builder = PresetBuilder::new();
     builder.add(&references::plugin()).unwrap();
+
     let extractor = Extractor::new(&builder.build().unwrap());
     let id = "aabbccdd-0000-0000-0000-000000000001";
+
     let forms = [
         id.to_owned(),
         id.to_uppercase(),
@@ -21,10 +23,12 @@ fn normalized_references_preserve_order_duplicates_and_categories() {
         format!("{id}/extra"),
         "あ".repeat(12),
     ];
+
     let mut document = Document {
         source: "x".into(),
         children: vec![],
     };
+
     for target in [
         ReferenceKind::User,
         ReferenceKind::Group,
@@ -41,10 +45,12 @@ fn normalized_references_preserve_order_duplicates_and_categories() {
             ));
         }
     }
+
     let result = extractor.extract(&document).unwrap();
     assert_eq!(result.mentions, vec![id; 7]);
     assert_eq!(result.group_mentions, vec![id; 7]);
     assert_eq!(result.channel_links, vec![id; 7]);
+
     assert_eq!(
         serde_json::to_value(&result).unwrap(),
         serde_json::json!({
@@ -54,6 +60,7 @@ fn normalized_references_preserve_order_duplicates_and_categories() {
             "embeddings": result.embeddings
         })
     );
+
     document.children.clear();
     assert_eq!(extractor.extract(&document).unwrap(), References::default());
 }

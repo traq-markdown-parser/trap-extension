@@ -10,9 +10,11 @@ pub fn plugin() -> Plugin {
 
 fn build() -> Result<Plugin> {
     let mut spoiler = Plugin::new(&markdown_trap_contracts::preset().spoiler);
+
     spoiler.on::<SpoilerData>(|_, nodes, ctx| {
         let content = ctx.children(nodes)?;
         let mut output = String::new();
+
         for ch in content.chars() {
             ctx.append(
                 &mut output,
@@ -23,7 +25,9 @@ fn build() -> Result<Plugin> {
                 },
             )?;
         }
+
         Ok(output)
     })?;
+
     Ok(spoiler)
 }

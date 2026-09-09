@@ -1,4 +1,5 @@
 use markdown_commonmark::{self as commonmark, LinkOptions};
+
 use markdown_parser::{
     NodeKind, Span,
     engine::{
@@ -6,6 +7,7 @@ use markdown_parser::{
         block::{BlockRule, DraftContent, DraftNode},
     },
 };
+
 pub use markdown_trap_contracts::BlankLineData;
 
 pub fn links() -> LinkOptions {
@@ -67,7 +69,9 @@ fn add_blank_line(node: &mut DraftNode) {
             start: node.span.end,
             end: node.span.end,
         };
+
         let blank = NodeKind::new(BlankLineData {});
+
         node.content = DraftContent::Nodes(vec![DraftNode::leaf(span, blank)]);
     }
 }

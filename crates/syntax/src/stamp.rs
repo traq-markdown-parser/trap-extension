@@ -23,6 +23,7 @@ fn parse(
         )
         .unwrap()
     });
+
     let tail = input.tail();
     let limit = tail[1..].find(':').map_or(tail.len(), |n| n + 2);
 
@@ -30,6 +31,7 @@ fn parse(
     let Some(matched) = STAMP.find(&tail[..limit]) else {
         return Ok(None);
     };
+
     let data = StampData {
         literal: tail[..matched.end()].into(),
     };

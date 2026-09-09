@@ -6,7 +6,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config = ts_rs::Config::default()
         .with_out_dir(&directory)
         .with_import_extension(Some("js"));
+
     let mut nodes = serde_json::Map::new();
+
     macro_rules! register {
         ($($ty:ident),*) => {
             $(
@@ -24,6 +26,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             )*
         };
     }
+
     register!(
         StampData,
         ReferenceData,
@@ -31,10 +34,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         SpoilerData,
         BlankLineData
     );
+
     std::fs::create_dir_all(&directory)?;
     std::fs::write(
         std::path::Path::new(&directory).join("contracts.json"),
         serde_json::to_vec_pretty(&serde_json::json!({"nodes":nodes}))?,
     )?;
+
     Ok(())
 }

@@ -17,12 +17,15 @@ pub fn normalize(value: &str) -> Option<String> {
         41 | 45 => value.strip_prefix("urn:uuid:")?,
         _ => return None,
     };
+
     if is_canonical(value) {
         return Some(value.to_ascii_lowercase());
     }
+
     if value.len() != 32 || !value.bytes().all(|b| b.is_ascii_hexdigit()) {
         return None;
     }
+
     Some(
         format!(
             "{}-{}-{}-{}-{}",
