@@ -58,12 +58,12 @@ checksum = "8f42a60cbdf9a97f5d2305f08a87dc4e09308d1276d28c869c684d7777685682"
 [[package]]
 name = "markdown-ast"
 version = "0.1.0"
-source = "git+https://github.com/traq-markdown-parser/core.git?rev=fd5c12c919719ba771c62d12585f667d106bfc8d#fd5c12c919719ba771c62d12585f667d106bfc8d"
+source = "git+https://github.com/traq-markdown-parser/core.git?rev=1ccba0a7a63f7128873b4490e8f0b1c5b8714099#1ccba0a7a63f7128873b4490e8f0b1c5b8714099"
 
 [[package]]
 name = "markdown-commonmark"
 version = "0.1.0"
-source = "git+https://github.com/traq-markdown-parser/commonmark.git?rev=9758568592c8fc1b13e56e101e31308a55affdb4#9758568592c8fc1b13e56e101e31308a55affdb4"
+source = "git+https://github.com/traq-markdown-parser/commonmark.git?rev=00fdb814d980ee4e326eb6a05d8ff4bba289d291#00fdb814d980ee4e326eb6a05d8ff4bba289d291"
 dependencies = [
  "idna",
  "markdown-commonmark-contracts",
@@ -76,7 +76,7 @@ dependencies = [
 [[package]]
 name = "markdown-commonmark-contracts"
 version = "0.1.0"
-source = "git+https://github.com/traq-markdown-parser/commonmark.git?rev=9758568592c8fc1b13e56e101e31308a55affdb4#9758568592c8fc1b13e56e101e31308a55affdb4"
+source = "git+https://github.com/traq-markdown-parser/commonmark.git?rev=00fdb814d980ee4e326eb6a05d8ff4bba289d291#00fdb814d980ee4e326eb6a05d8ff4bba289d291"
 dependencies = [
  "markdown-ast",
  "markdown-definitions",
@@ -86,7 +86,7 @@ dependencies = [
 [[package]]
 name = "markdown-definitions"
 version = "0.1.0"
-source = "git+https://github.com/traq-markdown-parser/core.git?rev=fd5c12c919719ba771c62d12585f667d106bfc8d#fd5c12c919719ba771c62d12585f667d106bfc8d"
+source = "git+https://github.com/traq-markdown-parser/core.git?rev=1ccba0a7a63f7128873b4490e8f0b1c5b8714099#1ccba0a7a63f7128873b4490e8f0b1c5b8714099"
 dependencies = [
  "markdown-definitions-derive",
 ]
@@ -94,7 +94,7 @@ dependencies = [
 [[package]]
 name = "markdown-definitions-derive"
 version = "0.1.0"
-source = "git+https://github.com/traq-markdown-parser/core.git?rev=fd5c12c919719ba771c62d12585f667d106bfc8d#fd5c12c919719ba771c62d12585f667d106bfc8d"
+source = "git+https://github.com/traq-markdown-parser/core.git?rev=1ccba0a7a63f7128873b4490e8f0b1c5b8714099#1ccba0a7a63f7128873b4490e8f0b1c5b8714099"
 dependencies = [
  "proc-macro-crate",
  "proc-macro2",
@@ -105,7 +105,7 @@ dependencies = [
 [[package]]
 name = "markdown-extractor"
 version = "0.1.0"
-source = "git+https://github.com/traq-markdown-parser/core.git?rev=fd5c12c919719ba771c62d12585f667d106bfc8d#fd5c12c919719ba771c62d12585f667d106bfc8d"
+source = "git+https://github.com/traq-markdown-parser/core.git?rev=1ccba0a7a63f7128873b4490e8f0b1c5b8714099#1ccba0a7a63f7128873b4490e8f0b1c5b8714099"
 dependencies = [
  "markdown-ast",
  "markdown-definitions",
@@ -114,7 +114,7 @@ dependencies = [
 [[package]]
 name = "markdown-parser"
 version = "0.1.0"
-source = "git+https://github.com/traq-markdown-parser/core.git?rev=fd5c12c919719ba771c62d12585f667d106bfc8d#fd5c12c919719ba771c62d12585f667d106bfc8d"
+source = "git+https://github.com/traq-markdown-parser/core.git?rev=1ccba0a7a63f7128873b4490e8f0b1c5b8714099#1ccba0a7a63f7128873b4490e8f0b1c5b8714099"
 dependencies = [
  "markdown-ast",
  "markdown-definitions",
@@ -125,7 +125,7 @@ dependencies = [
 [[package]]
 name = "markdown-renderer"
 version = "0.1.0"
-source = "git+https://github.com/traq-markdown-parser/core.git?rev=fd5c12c919719ba771c62d12585f667d106bfc8d#fd5c12c919719ba771c62d12585f667d106bfc8d"
+source = "git+https://github.com/traq-markdown-parser/core.git?rev=1ccba0a7a63f7128873b4490e8f0b1c5b8714099#1ccba0a7a63f7128873b4490e8f0b1c5b8714099"
 dependencies = [
  "markdown-ast",
  "markdown-definitions",
