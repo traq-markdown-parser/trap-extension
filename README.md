@@ -44,3 +44,7 @@ TypeScript の実装もこのリポジトリの責務に合わせて配置して
 AST の共通形は core の `typescript/ast.ts` に一度だけ定義し、traq の生成 bindings はそれを構文の union で特殊化します。構文の payload は Rust を正として生成し、commonmark と trap-extension の `npm run generate:bindings` でそれぞれの契約 crate から再生成できます。
 
 HTML API は `/renderer` サブパスです。traQ は `@traq-markdown-parser/traq/renderer/v1` の `messageRenderer`、CSS は `@traq-markdown-parser/traq/index.css` を利用します。
+
+## Go contracts
+
+The Go module is `github.com/traq-markdown-parser/trap-extension/go`. Payloads and node factories are generated from this repository's Rust contracts by `npm run generate:bindings`. The canonical tree and Wasm runtime belong to the core Go module.
