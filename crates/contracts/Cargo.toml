@@ -15,3 +15,11 @@ markdown-definitions = { git = "https://github.com/traq-markdown-parser/core.git
 serde = { version = "1", features = ["derive"] }
 ts-rs = { version = "12", optional = true, features = ["serde-json-impl"] }
 schemars = { version = "1.2.2", optional = true }
+
+[dev-dependencies]
+serde_json = "1"
+
+[[example]]
+name = "export-trap-types"
+path = "examples/export-types.rs"
+required-features = ["contracts"]
