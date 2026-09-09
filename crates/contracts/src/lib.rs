@@ -12,3 +12,6 @@ mod spoiler;
 pub use spoiler::*;
 mod compat;
 pub use compat::*;
+
+mod embedding;
+pub use embedding::*;

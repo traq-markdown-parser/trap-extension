@@ -13,7 +13,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .into_generator().into_root_schema_for::<$ty>();
         nodes.insert($ty::type_key(), serde_json::json!({"group":"trap","schema":schema}));
     )*}; }
-    register!(StampData, ReferenceData, SpoilerData, BlankLineData);
+    register!(
+        StampData,
+        ReferenceData,
+        EmbeddingData,
+        SpoilerData,
+        BlankLineData
+    );
     std::fs::create_dir_all(&directory)?;
     std::fs::write(
         std::path::Path::new(&directory).join("contracts.json"),

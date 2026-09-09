@@ -1,5 +1,5 @@
 import { names, isKnownNode } from "@traq-markdown-parser/trap-extension/nodes";
-import { checked } from "@traq-markdown-parser/core/html";
+import { checked, escapeHtml } from "@traq-markdown-parser/core/html";
 import { Plugin as Declaration } from "@traq-markdown-parser/core/definitions";
 import { Plugin } from "@traq-markdown-parser/core/renderer";
 import { validateLink as defaultPolicy } from "@traq-markdown-parser/commonmark/policy";
@@ -37,6 +37,11 @@ export function plugin({
   result.on(
     names.BlankLine,
     checked(names.BlankLine, isKnownNode, () => "<br>\n"),
+  );
+
+  result.on(
+    names.Embedding,
+    checked(names.Embedding, isKnownNode, (node) => escapeHtml(node.data.literal)),
   );
 
   const stamp = stampRenderer({ store, baseUrl });

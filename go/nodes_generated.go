@@ -10,6 +10,16 @@ type BlankLine struct {
 
 func (*BlankLine) NodePayload() {}
 
+const EmbeddingName = "markdown_trap_contracts::embedding::EmbeddingData"
+
+type Embedding struct {
+	ID      string `json:"id"`
+	Literal string `json:"literal"`
+	Type    string `json:"type"`
+}
+
+func (*Embedding) NodePayload() {}
+
 const ReferenceName = "markdown_trap_contracts::reference::ReferenceData"
 
 type Reference struct {
@@ -38,6 +48,8 @@ func NewPayload(kind string) ast.Payload {
 	switch kind {
 	case BlankLineName:
 		return &BlankLine{}
+	case EmbeddingName:
+		return &Embedding{}
 	case ReferenceName:
 		return &Reference{}
 	case SpoilerName:

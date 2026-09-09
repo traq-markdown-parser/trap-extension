@@ -5,7 +5,7 @@ use markdown_parser::{
         inline::{InlineInput, InlineMatch, InlineRule},
     },
 };
-pub use markdown_trap_contracts::{ReferenceData, ReferenceKind};
+pub use markdown_trap_contracts::{EmbeddingData, EmbeddingKind, ReferenceData, ReferenceKind};
 
 pub fn inline_rule() -> &'static InlineRule {
     static RULE: std::sync::LazyLock<InlineRule> =
@@ -36,10 +36,7 @@ fn parse(input: &InlineInput<'_>, budget: &mut Budget) -> Result<Option<InlineMa
         return Ok(None);
     };
 
-    Ok(Some(InlineMatch::leaf(
-        end,
-        markdown_parser::NodeKind::new(data),
-    )))
+    Ok(Some(InlineMatch::leaf(end, data)))
 }
 
 fn json_end(input: &InlineInput<'_>, budget: &mut Budget) -> Result<Option<usize>, ParseError> {
@@ -80,10 +77,21 @@ fn json_end(input: &InlineInput<'_>, budget: &mut Budget) -> Result<Option<usize
     Ok(None)
 }
 
-fn reference_data(text: &str) -> Option<ReferenceData> {
+fn reference_data(text: &str) -> Option<markdown_parser::NodeKind> {
     let value = serde_json::from_str::<serde_json::Value>(text).ok()?;
     let target = value.get("type").and_then(|value| value.as_str())?;
     let id = value.get("id").and_then(|value| value.as_str())?;
+    if matches!(target, "file" | "message") {
+        return Some(markdown_parser::NodeKind::new(EmbeddingData {
+            target: if target == "file" {
+                EmbeddingKind::File
+            } else {
+                EmbeddingKind::Message
+            },
+            id: id.into(),
+            literal: format!("!{text}"),
+        }));
+    }
     let label = value.get("raw").and_then(|value| value.as_str())?;
     let target = match target {
         "user" => ReferenceKind::User,
@@ -92,9 +100,9 @@ fn reference_data(text: &str) -> Option<ReferenceData> {
         _ => return None,
     };
 
-    Some(ReferenceData {
+    Some(markdown_parser::NodeKind::new(ReferenceData {
         target,
         id: id.into(),
         label: label.into(),
-    })
+    }))
 }
