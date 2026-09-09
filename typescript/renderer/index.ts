@@ -30,7 +30,7 @@ export function plugin({
     checked(
       names.Spoiler,
       isKnownNode,
-      (n, ctx) => '<span class="spoiler">' + ctx.inline(n.children) + "</span>",
+      (n, ctx) => '<span class="spoiler">' + ctx.render(n.children) + "</span>",
     ),
   );
 
