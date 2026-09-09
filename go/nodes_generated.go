@@ -14,6 +14,7 @@ const EmbeddingName = "markdown_trap_contracts::embedding::EmbeddingData"
 
 type Embedding struct {
 	ID      string `json:"id"`
+	Label   string `json:"label"`
 	Literal string `json:"literal"`
 	Type    string `json:"type"`
 }

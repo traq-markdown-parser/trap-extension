@@ -89,6 +89,11 @@ fn reference_data(text: &str) -> Option<markdown_parser::NodeKind> {
                 EmbeddingKind::Message
             },
             id: id.into(),
+            label: value
+                .get("raw")
+                .and_then(|value| value.as_str())
+                .unwrap_or("")
+                .into(),
             literal: format!("!{text}"),
         }));
     }

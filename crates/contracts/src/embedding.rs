@@ -15,6 +15,7 @@ pub struct EmbeddingData {
     #[serde(rename = "type")]
     pub target: EmbeddingKind,
     pub id: String,
+    pub label: String,
     /// Original JSON notation, available to renderers that display it as text.
     pub literal: String,
 }

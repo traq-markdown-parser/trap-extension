@@ -1,6 +1,16 @@
 use markdown_extractor::{Plugin, Result};
-use markdown_trap_contracts::{ReferenceData, ReferenceKind};
+use markdown_trap_contracts::{EmbeddingData, EmbeddingKind, ReferenceData, ReferenceKind};
 use serde::Serialize;
+
+#[derive(Debug, PartialEq, Serialize)]
+#[cfg_attr(feature = "contracts", derive(ts_rs::TS, schemars::JsonSchema))]
+#[serde(deny_unknown_fields)]
+pub struct EmbeddedInfo {
+    pub raw: String,
+    #[serde(rename = "type")]
+    pub kind: String,
+    pub id: String,
+}
 
 #[derive(Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "contracts", derive(ts_rs::TS, schemars::JsonSchema))]
@@ -9,6 +19,7 @@ pub struct References {
     pub mentions: Vec<String>,
     pub group_mentions: Vec<String>,
     pub channel_links: Vec<String>,
+    pub embeddings: Vec<EmbeddedInfo>,
 }
 /// Repeated calls share the default implementation; editing a value is isolated.
 pub fn plugin() -> Plugin<References> {
@@ -20,6 +31,18 @@ pub fn plugin() -> Plugin<References> {
 fn build() -> Result<Plugin<References>> {
     let mut plugin = Plugin::<References>::new(&markdown_trap_contracts::preset().references);
     plugin.on::<ReferenceData>(|reference, result| {
+        if !reference.id.is_empty() {
+            result.embeddings.push(EmbeddedInfo {
+                raw: reference.label.clone(),
+                kind: match reference.target {
+                    ReferenceKind::User => "user",
+                    ReferenceKind::Group => "group",
+                    ReferenceKind::Channel => "channel",
+                }
+                .into(),
+                id: reference.id.clone(),
+            });
+        }
         if let Some(id) = crate::uuid::normalize(&reference.id) {
             let ids = match reference.target {
                 ReferenceKind::User => &mut result.mentions,
@@ -28,6 +51,20 @@ fn build() -> Result<Plugin<References>> {
             };
             // Preserve document order and duplicates, including inside spoilers.
             ids.push(id);
+        }
+        Ok(())
+    })?;
+    plugin.on::<EmbeddingData>(|embedding, result| {
+        if !embedding.id.is_empty() {
+            result.embeddings.push(EmbeddedInfo {
+                raw: embedding.label.clone(),
+                kind: match embedding.target {
+                    EmbeddingKind::File => "file",
+                    EmbeddingKind::Message => "message",
+                }
+                .into(),
+                id: embedding.id.clone(),
+            });
         }
         Ok(())
     })?;

@@ -48,7 +48,7 @@ fn normalized_references_preserve_order_duplicates_and_categories() {
     assert_eq!(
         serde_json::to_value(&result).unwrap(),
         serde_json::json!({
-            "mentions": vec![id; 7], "groupMentions": vec![id; 7], "channelLinks": vec![id; 7]
+            "mentions": vec![id; 7], "groupMentions": vec![id; 7], "channelLinks": vec![id; 7], "embeddings": result.embeddings
         })
     );
     document.children.clear();
