@@ -6,10 +6,13 @@ pub use declarations::{Contracts, preset};
 
 mod reference;
 pub use reference::*;
+
 mod stamp;
 pub use stamp::*;
+
 mod spoiler;
 pub use spoiler::*;
+
 mod compat;
 pub use compat::*;
 

@@ -3,6 +3,7 @@
 
 pub mod references;
 mod uuid;
+
 pub use references::{EmbeddedInfo, References};
 
 /// Normalize the UUID representations accepted by traP reference payloads.

@@ -42,7 +42,7 @@ pub fn quote_rule() -> &'static BlockRule {
             };
 
             for node in &mut found.nodes {
-                if matches!(&node.content, DraftContent::Blocks(view) if view.text().trim_matches([' ', '\t', '\n', '\r']).is_empty()) {
+                if is_blank_quote(node) {
                     node.finish = Some(add_blank_line);
                 }
             }
@@ -52,6 +52,13 @@ pub fn quote_rule() -> &'static BlockRule {
         .named("quote")
     });
     &RULE
+}
+
+fn is_blank_quote(node: &DraftNode) -> bool {
+    matches!(&node.content, DraftContent::Blocks(view) if view
+        .text()
+        .trim_matches([' ', '\t', '\n', '\r'])
+        .is_empty())
 }
 
 fn add_blank_line(node: &mut DraftNode) {

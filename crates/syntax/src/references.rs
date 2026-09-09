@@ -81,13 +81,9 @@ fn reference_data(text: &str) -> Option<markdown_parser::NodeKind> {
     let value = serde_json::from_str::<serde_json::Value>(text).ok()?;
     let target = value.get("type").and_then(|value| value.as_str())?;
     let id = value.get("id").and_then(|value| value.as_str())?;
-    if matches!(target, "file" | "message") {
+    if let Some(kind) = embedding_kind(target) {
         return Some(markdown_parser::NodeKind::new(EmbeddingData {
-            target: if target == "file" {
-                EmbeddingKind::File
-            } else {
-                EmbeddingKind::Message
-            },
+            target: kind,
             id: id.into(),
             label: value
                 .get("raw")
@@ -98,16 +94,28 @@ fn reference_data(text: &str) -> Option<markdown_parser::NodeKind> {
         }));
     }
     let label = value.get("raw").and_then(|value| value.as_str())?;
-    let target = match target {
-        "user" => ReferenceKind::User,
-        "group" => ReferenceKind::Group,
-        "channel" => ReferenceKind::Channel,
-        _ => return None,
-    };
+    let target = reference_kind(target)?;
 
     Some(markdown_parser::NodeKind::new(ReferenceData {
         target,
         id: id.into(),
         label: label.into(),
     }))
+}
+
+fn embedding_kind(target: &str) -> Option<EmbeddingKind> {
+    match target {
+        "file" => Some(EmbeddingKind::File),
+        "message" => Some(EmbeddingKind::Message),
+        _ => None,
+    }
+}
+
+fn reference_kind(target: &str) -> Option<ReferenceKind> {
+    match target {
+        "user" => Some(ReferenceKind::User),
+        "group" => Some(ReferenceKind::Group),
+        "channel" => Some(ReferenceKind::Channel),
+        _ => None,
+    }
 }

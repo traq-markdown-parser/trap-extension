@@ -19,4 +19,5 @@ pub struct EmbeddingData {
     /// Original JSON notation, available to renderers that display it as text.
     pub literal: String,
 }
+
 impl markdown_ast::NodeData for EmbeddingData {}

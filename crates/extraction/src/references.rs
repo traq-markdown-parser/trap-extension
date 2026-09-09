@@ -31,42 +31,51 @@ pub fn plugin() -> Plugin<References> {
 fn build() -> Result<Plugin<References>> {
     let mut plugin = Plugin::<References>::new(&markdown_trap_contracts::preset().references);
     plugin.on::<ReferenceData>(|reference, result| {
-        if !reference.id.is_empty() {
-            result.embeddings.push(EmbeddedInfo {
-                raw: reference.label.clone(),
-                kind: match reference.target {
-                    ReferenceKind::User => "user",
-                    ReferenceKind::Group => "group",
-                    ReferenceKind::Channel => "channel",
-                }
-                .into(),
-                id: reference.id.clone(),
-            });
-        }
-        if let Some(id) = crate::uuid::normalize(&reference.id) {
-            let ids = match reference.target {
-                ReferenceKind::User => &mut result.mentions,
-                ReferenceKind::Group => &mut result.group_mentions,
-                ReferenceKind::Channel => &mut result.channel_links,
-            };
-            // Preserve document order and duplicates, including inside spoilers.
-            ids.push(id);
-        }
+        add_reference(reference, result);
         Ok(())
     })?;
     plugin.on::<EmbeddingData>(|embedding, result| {
-        if !embedding.id.is_empty() {
-            result.embeddings.push(EmbeddedInfo {
-                raw: embedding.label.clone(),
-                kind: match embedding.target {
-                    EmbeddingKind::File => "file",
-                    EmbeddingKind::Message => "message",
-                }
-                .into(),
-                id: embedding.id.clone(),
-            });
-        }
+        add_embedding(embedding, result);
         Ok(())
     })?;
     Ok(plugin)
+}
+
+fn add_reference(reference: &ReferenceData, result: &mut References) {
+    if !reference.id.is_empty() {
+        result.embeddings.push(EmbeddedInfo {
+            raw: reference.label.clone(),
+            kind: match reference.target {
+                ReferenceKind::User => "user",
+                ReferenceKind::Group => "group",
+                ReferenceKind::Channel => "channel",
+            }
+            .into(),
+            id: reference.id.clone(),
+        });
+    }
+
+    if let Some(id) = crate::uuid::normalize(&reference.id) {
+        let ids = match reference.target {
+            ReferenceKind::User => &mut result.mentions,
+            ReferenceKind::Group => &mut result.group_mentions,
+            ReferenceKind::Channel => &mut result.channel_links,
+        };
+        // Preserve document order and duplicates, including inside spoilers.
+        ids.push(id);
+    }
+}
+
+fn add_embedding(embedding: &EmbeddingData, result: &mut References) {
+    if !embedding.id.is_empty() {
+        result.embeddings.push(EmbeddedInfo {
+            raw: embedding.label.clone(),
+            kind: match embedding.target {
+                EmbeddingKind::File => "file",
+                EmbeddingKind::Message => "message",
+            }
+            .into(),
+            id: embedding.id.clone(),
+        });
+    }
 }
