@@ -43,13 +43,7 @@ pub fn quote_rule() -> &'static BlockRule {
 
             for node in &mut found.nodes {
                 if matches!(&node.content, DraftContent::Blocks(view) if view.text().trim_matches([' ', '\t', '\n', '\r']).is_empty()) {
-                    node.finish = Some(|node| {
-                        if node.children().is_empty() {
-                            let span = Span { start: node.span.end, end: node.span.end };
-                            let blank = NodeKind::new(BlankLineData {});
-                            node.content = DraftContent::Nodes(vec![DraftNode::leaf(span, blank)]);
-                        }
-                    });
+                    node.finish = Some(add_blank_line);
                 }
             }
 
@@ -58,6 +52,17 @@ pub fn quote_rule() -> &'static BlockRule {
         .named("quote")
     });
     &RULE
+}
+
+fn add_blank_line(node: &mut DraftNode) {
+    if node.children().is_empty() {
+        let span = Span {
+            start: node.span.end,
+            end: node.span.end,
+        };
+        let blank = NodeKind::new(BlankLineData {});
+        node.content = DraftContent::Nodes(vec![DraftNode::leaf(span, blank)]);
+    }
 }
 
 pub fn plugin() -> &'static Plugin {
