@@ -1,6 +1,6 @@
 // Generated from Rust contracts. Do not edit.
 export type BlankLineData = Record<symbol, never>;
-export type EmbeddingData = { type: EmbeddingKind, id: string, 
+export type EmbeddingData = { type: EmbeddingKind, id: string,
 /**
  * Original JSON notation, available to renderers that display it as text.
  */
