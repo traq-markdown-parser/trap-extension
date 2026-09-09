@@ -3,8 +3,8 @@ import { escapeHtml } from "@traq-markdown-parser/core/html";
 import { validateLink } from "@traq-markdown-parser/commonmark/policy";
 import { animeEffects, sizeEffects } from "./stamp-effects.js";
 
-const animeEffectSet = new Set(animeEffects);
-const sizeEffectSet = new Set(sizeEffects);
+const animeEffectSet = new Set<string>(animeEffects);
+const sizeEffectSet = new Set<string>(sizeEffects);
 
 const animeEffectAliasMap = new Map([
   ["marquee", "conga"],

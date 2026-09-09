@@ -23,5 +23,8 @@ export const animeEffects = [
   "shake",
   "party",
   "attract",
-];
-export const sizeEffects = ["ex-large", "large", "small"];
+] as const;
+export const sizeEffects = ["ex-large", "large", "small"] as const;
+
+export type AnimeEffect = (typeof animeEffects)[number];
+export type SizeEffect = (typeof sizeEffects)[number];
